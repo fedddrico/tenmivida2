@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ten mi vida</title>
+    <style>
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #00ff00;
+        cursor: none; /* Oculta el cursor real */
+      }
+
+      .box {
+        position: absolute;
+        width: 100px;
+        height: 25px;
+        background-color: ButtonFace;
+        border: 2px outset lightgray;
+        color: black;
+        text-align: center;
+        line-height: 25px;
+        cursor: none;
+        font-family: Arial, sans-serif; /* Cambiar la tipografía */
+        font-size: 12px; /* Cambiar el tamaño de la letra */
+      }
+
+      #customCursor {
+        width: 20px; /* Ajusta según el tamaño de tu imagen */
+        height: 20px;
+        background-image: url("https://cdn.glitch.global/4582a511-ee32-4abf-b221-b21d313b31d6/cursor?v=1743014557412"); /* Imagen local */
+        background-size: cover;
+        position: absolute;
+        pointer-events: none; /* No interfiere con otros elementos */
+      }
+
+      
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">ten mi vida</div>
+    <div id="customCursor"></div>
+
+    <script>
+      const cursor = document.getElementById("customCursor");
+      const box = document.querySelector(".box");
+
+      document.addEventListener("mousemove", function (event) {
+        const rect = box.getBoundingClientRect();
+        let x = event.clientX;
+        let y = event.clientY;
+
+        // Verificar colisión con el cajón y detener el movimiento
+        if (x < rect.left) x = rect.left;
+        if (x > rect.right - cursor.offsetWidth)
+          x = rect.right - cursor.offsetWidth;
+        if (y < rect.top) y = rect.top;
+        if (y > rect.bottom - cursor.offsetHeight)
+          y = rect.bottom - cursor.offsetHeight;
+
+        cursor.style.left = `${x}px`;
+        cursor.style.top = `${y}px`;
+      });
+      
+            document.addEventListener("click", function () {
+        location.reload();
+      });
+      
+    </script>
+  </body>
+</html>
