@@ -11,8 +11,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #00ff00;
-        cursor: none; /* Oculta el cursor real */
+        background-color: #00ff00; /* verde inicial */
+        cursor: none; /* oculta el cursor real */
       }
 
       .box {
@@ -25,26 +25,23 @@
         text-align: center;
         line-height: 25px;
         cursor: none;
-        font-family: Arial, sans-serif; /* Cambiar la tipografía */
-        font-size: 12px; /* Cambiar el tamaño de la letra */
+        font-family: Arial, sans-serif;
+        font-size: 12px;
       }
 
-      .box:active {
-        border: 2px inset lightgray; /* Se ve como hundido */
-        background-color: #dcdcdc;  /* Gris más oscuro para dar sensación de presión */
+      /* Efecto al hacer clic en cualquier parte */
+      .box.clicked {
+        border: 2px inset lightgray;
+        background-color: #dcdcdc;
       }
-
 
       #customCursor {
-        width: 20px; /* Ajusta según el tamaño de tu imagen */
+        width: 20px;
         height: 20px;
-        background-image: url("CURSOR.webp"); /* Imagen local */
+        background-image: url("CURSOR.webp");
         background-size: cover;
         position: absolute;
-        pointer-events: none; /* No interfiere con otros elementos */
-      }
-
-      
+        pointer-events: none;
       }
     </style>
   </head>
@@ -53,30 +50,50 @@
     <div id="customCursor"></div>
 
     <script>
-      const cursor = document.getElementById("customCursor");
-      const box = document.querySelector(".box");
+  const cursor = document.getElementById("customCursor");
+  const box = document.querySelector(".box");
 
-      document.addEventListener("mousemove", function (event) {
-        const rect = box.getBoundingClientRect();
-        let x = event.clientX;
-        let y = event.clientY;
+  document.addEventListener("mousemove", function (event) {
+    const rect = box.getBoundingClientRect();
+    let x = event.clientX;
+    let y = event.clientY;
 
-        // Verificar colisión con el cajón y detener el movimiento
-        if (x < rect.left) x = rect.left;
-        if (x > rect.right - cursor.offsetWidth)
-          x = rect.right - cursor.offsetWidth;
-        if (y < rect.top) y = rect.top;
-        if (y > rect.bottom - cursor.offsetHeight)
-          y = rect.bottom - cursor.offsetHeight;
+    if (x < rect.left) x = rect.left;
+    if (x > rect.right - cursor.offsetWidth)
+      x = rect.right - cursor.offsetWidth;
+    if (y < rect.top) y = rect.top;
+    if (y > rect.bottom - cursor.offsetHeight)
+      y = rect.bottom - cursor.offsetHeight;
 
-        cursor.style.left = `${x}px`;
-        cursor.style.top = `${y}px`;
-      });
-      
-            document.addEventListener("click", function () {
-        location.reload();
-      });
-      
-    </script>
+    cursor.style.left = `${x}px`;
+    cursor.style.top = `${y}px`;
+  });
+
+  document.addEventListener("click", function () {
+    // 1️⃣ Hundir botón inmediatamente (sobre verde)
+    box.classList.add("clicked");
+
+    // 2️⃣ Muy rápido (150ms) → ocultar botón+cursor Y cambiar a blanco
+    setTimeout(() => {
+      box.style.display = "none";
+      cursor.style.display = "none";
+      document.body.style.backgroundColor = "white";
+    }, 150);
+
+    // 3️⃣ Después de 1s → verde otra vez
+    setTimeout(() => {
+      document.body.style.backgroundColor = "#00ff00";
+    }, 1000);
+
+    // 4️⃣ Después de 2s → mostrar botón/cursor de nuevo y recargar
+    setTimeout(() => {
+      box.style.display = "block";
+      cursor.style.display = "block";
+      box.classList.remove("clicked"); // reset
+      location.reload();
+    }, 2000);
+  });
+</script>
+
   </body>
 </html>
